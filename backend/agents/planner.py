@@ -16,7 +16,7 @@ Return only a numbered list.
 
         response = llm_service.generate(
             system_prompt=self.SYSTEM_PROMPT,
-            user_prompt=state["topic"],
+            user_prompt=state.topic,
         )
 
         plan = []
@@ -27,6 +27,5 @@ Return only a numbered list.
             if line:
                 plan.append(line)
 
-        state["research_plan"] = plan
-
+        state.research_plan = plan
         return state

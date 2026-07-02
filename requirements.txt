@@ -12,7 +12,9 @@ pydantic-settings
 
 ollama
 
-duckduckgo-search
+tavily-python
+ddgs
+wikipedia-api
 trafilatura
 beautifulsoup4
 lxml

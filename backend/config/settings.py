@@ -1,4 +1,4 @@
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
@@ -6,6 +6,8 @@ class Settings(BaseSettings):
 
     OLLAMA_BASE_URL: str = "http://localhost:11434"
     OLLAMA_MODEL: str = "llama3.2:3b"
+
+    TAVILY_API_KEY: str
 
     MAX_SUB_QUESTIONS: int = 5
     MAX_REVISIONS: int = 3
@@ -15,8 +17,10 @@ class Settings(BaseSettings):
 
     SQLITE_DB: str = "metrics.db"
 
-    class Config:
-        env_file = ".env"
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        extra="ignore",
+    )
 
 
 settings = Settings()

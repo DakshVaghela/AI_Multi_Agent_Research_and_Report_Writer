@@ -1,18 +1,23 @@
-from ollama import Client
-
-from backend.config.settings import settings
-
-
 class LLMService:
     """
     Centralized Ollama service used by all agents.
     """
 
     def __init__(self):
+        from backend.config.settings import settings
+
+        try:
+            from ollama import Client
+        except ModuleNotFoundError as exc:
+            raise ModuleNotFoundError(
+                "The 'ollama' package is required. Install project dependencies with "
+                "`python -m pip install -r requirements.txt` from your active virtual environment."
+            ) from exc
+
         self.client = Client(host=settings.OLLAMA_BASE_URL)
         self.model = settings.OLLAMA_MODEL
 
-    def generate(
+    def generate(   
         self,
         system_prompt: str,
         user_prompt: str,
@@ -42,4 +47,26 @@ class LLMService:
         return response["message"]["content"]
 
 
-llm_service = LLMService()
+class LazyLLMService:
+    def __init__(self):
+        self._service: LLMService | None = None
+
+    def _get_service(self) -> LLMService:
+        if self._service is None:
+            self._service = LLMService()
+        return self._service
+
+    def generate(
+        self,
+        system_prompt: str,
+        user_prompt: str,
+        temperature: float = 0.3,
+    ) -> str:
+        return self._get_service().generate(
+            system_prompt=system_prompt,
+            user_prompt=user_prompt,
+            temperature=temperature,
+        )
+
+
+llm_service = LazyLLMService()

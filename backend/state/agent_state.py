@@ -1,19 +1,25 @@
-from typing import List, TypedDict
+from typing import List
+
+from pydantic import BaseModel, Field
+
+from backend.models.citation import Citation
+from backend.models.report import Report
+from backend.models.research_note import ResearchNote
 
 
-class ResearchState(TypedDict):
+class ResearchState(BaseModel):
     topic: str
 
-    research_plan: List[str]
+    research_plan: List[str] = Field(default_factory=list)
 
-    research_notes: List[str]
+    research_notes: List[ResearchNote] = Field(default_factory=list)
 
-    citations: List[dict]
+    citations: List[Citation] = Field(default_factory=list)
 
-    draft_report: str
+    draft_report: Report | None = None
 
-    critique: str
+    critique: str = ""
 
-    revision_count: int
+    revision_count: int = 0
 
-    final_report: str
+    final_report: Report | None = None

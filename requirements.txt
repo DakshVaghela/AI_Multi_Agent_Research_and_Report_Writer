@@ -14,7 +14,7 @@ ollama
 
 tavily-python
 ddgs
-wikipedia-api
+wikipedia
 trafilatura
 beautifulsoup4
 lxml

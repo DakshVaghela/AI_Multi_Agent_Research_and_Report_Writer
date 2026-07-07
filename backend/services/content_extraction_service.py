@@ -1,10 +1,12 @@
 import trafilatura
 
 
-class ReaderTool:
+class ContentExtractionService:
+    """
+    Extracts clean textual content from web pages.
+    """
 
-    def extract(self, url: str):
-
+    def extract(self, url: str) -> str:
         downloaded = trafilatura.fetch_url(url)
 
         if not downloaded:
@@ -15,4 +17,4 @@ class ReaderTool:
         return content or ""
 
 
-reader_tool = ReaderTool()
+content_extraction_service = ContentExtractionService()

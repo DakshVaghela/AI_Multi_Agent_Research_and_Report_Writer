@@ -4,6 +4,9 @@ from wikipedia.exceptions import DisambiguationError, PageError
 from backend.models.search_result import SearchResult
 from backend.search.providers.base_provider import BaseSearchProvider
 
+# Set a custom user agent to avoid Wikipedia API blocks/rate limiting
+wikipedia.set_user_agent("AutonomousMultiAgentResearchSystem/1.0 (contact@example.com)")
+
 
 class WikipediaProvider(BaseSearchProvider):
 

@@ -1,0 +1,31 @@
+# Runtime dependencies for the FastAPI service only -- a scoped-down subset
+# of the root requirements.txt. Training-related packages (transformers,
+# peft, trl, datasets) and unused ones (streamlit, pymongo, sqlalchemy,
+# langchain, pytest) are intentionally left out: none of them are imported
+# by backend/, and transformers/peft/trl pull in a multi-GB torch install
+# that would make every image build slow for no runtime benefit.
+langgraph>=0.2.0
+
+fastapi
+uvicorn[standard]
+
+pydantic>=2.0
+pydantic-settings
+
+ollama
+
+tavily-python
+ddgs
+wikipedia
+trafilatura
+beautifulsoup4
+lxml
+
+python-dotenv
+
+reportlab
+markdown
+
+requests
+httpx
+pymongo

@@ -17,3 +17,5 @@ class ResearchNote(BaseModel):
     citations: List[Citation] = Field(default_factory=list)
 
     source_url: HttpUrl
+
+    full_content: str

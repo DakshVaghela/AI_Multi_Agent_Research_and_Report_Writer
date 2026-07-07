@@ -1,3 +1,5 @@
+from concurrent.futures import ThreadPoolExecutor
+
 from backend.models.citation import Citation
 from backend.models.research_note import ResearchNote
 from backend.search.search_service import search_service
@@ -41,23 +43,27 @@ class ResearchAgent:
                 print("No search results found.")
                 continue
 
-            # For now, use the best result only.
             combined_article = ""
             citations = []
 
-            successful = False
-
-            for result in results:
-
-                print(f"Trying: {result.title}")
-
-                article = content_extraction_service.extract(
-                    str(result.url)
+            # Sources are independent network fetches -- extracting them
+            # concurrently instead of one-by-one collapses this from
+            # N sequential round-trips to the slowest single one.
+            with ThreadPoolExecutor(max_workers=len(results)) as executor:
+                articles = list(
+                    executor.map(
+                        lambda r: content_extraction_service.extract(str(r.url)),
+                        results,
+                    )
                 )
 
+            for result, article in zip(results, articles):
+
                 if not article:
-                    print("Extraction failed.")
+                    print(f"Extraction failed: {result.title}")
                     continue
+
+                print(f"✓ Extracted: {result.title}")
 
                 combined_article += f"""
 
@@ -78,7 +84,7 @@ class ResearchAgent:
 
                 citations.append(citation)
 
-                successful = True
+            successful = bool(citations)
 
             if not successful:
                 print("❌ Could not extract any article for this question.")
@@ -96,9 +102,10 @@ class ResearchAgent:
                 source_url=str(citations[0].url),
                 summary=summary.summary,
                 key_points=summary.key_points,
+                full_content=combined_article,
                 citations=citations,
             )
-
+            
             state.research_notes.append(note)
             state.citations.extend(citations)
 

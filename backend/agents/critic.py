@@ -42,6 +42,9 @@ Conclusion:
 
         data = parse_llm_json(response)
 
+        if not data.get("feedback"):
+            data["feedback"] = ""
+
         return Review(**data)
 
     def run(

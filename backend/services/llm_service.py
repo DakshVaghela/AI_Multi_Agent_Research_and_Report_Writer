@@ -48,6 +48,10 @@ class LLMService:
                 },
             ],
             format="json" if json_mode else None,
+            # A workflow run makes dozens of calls to the same model; keep it
+            # resident between them instead of letting Ollama's 5-minute
+            # default evict and reload it mid-run.
+            keep_alive="30m",
             options={
                 "temperature": temperature,
                 "num_predict": num_predict,

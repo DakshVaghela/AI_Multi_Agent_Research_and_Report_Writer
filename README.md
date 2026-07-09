@@ -1,5 +1,14 @@
 # AI Multi-Agent Research &amp; Report Writer
 
+![Python](https://img.shields.io/badge/Python-3.11+-3776AB?logo=python&logoColor=white)
+![LangGraph](https://img.shields.io/badge/LangGraph-multi--agent-1C3C3C)
+![FastAPI](https://img.shields.io/badge/FastAPI-async%20API-009688?logo=fastapi&logoColor=white)
+![Ollama](https://img.shields.io/badge/Ollama-local%20LLM-000000?logo=ollama&logoColor=white)
+![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)
+![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?logo=mongodb&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker&logoColor=white)
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow)
+
 An autonomous, multi-agent research system that turns a single topic into a
 structured, citation-backed report — and iteratively critiques and revises it
 until it's good enough.
@@ -15,6 +24,7 @@ TypeScript** frontend.
 
 ## Table of Contents
 
+- [Demo](#demo)
 - [Architecture](#architecture)
 - [How it works](#how-it-works)
 - [Tech stack](#tech-stack)
@@ -28,6 +38,22 @@ TypeScript** frontend.
 - [API reference](#api-reference)
 - [Testing](#testing)
 - [Engineering highlights](#engineering-highlights)
+- [Project status &amp; limitations](#project-status--limitations)
+- [License](#license)
+
+---
+
+## Demo
+
+> **Screenshots / demo GIF go here.** Drop your images in a `docs/` folder and
+> reference them, e.g. `![Dashboard](docs/dashboard.png)`. A short screen
+> recording of a topic → generated report → PDF download makes the strongest
+> impression.
+
+<!--
+![New report](docs/new-report.png)
+![Generated report](docs/report.png)
+-->
 
 ---
 
@@ -250,3 +276,27 @@ pytest tests/test_workflow.py -v
   thread pool, collapsing N sequential round-trips to the slowest single fetch.
 - **Production-style backend** — FastAPI with async job queue, MongoDB auth
   (PBKDF2-SHA256 hashing), and full Docker Compose containerization.
+
+---
+
+## Project status &amp; limitations
+
+This is a portfolio project intended to run **locally** (or self-hosted). A few
+things to be aware of:
+
+- **Requires a local GPU-capable machine for the LLM.** Inference runs on Ollama
+  (Llama 3.2), so the app isn't hosted on a public URL — it's designed to be
+  cloned and run locally. The LLM layer is centralized in one service
+  (`backend/services/llm_service.py`), so swapping Ollama for a hosted LLM API
+  (e.g. Groq) is a small, isolated change if you want to deploy it.
+- **Job state is in-memory.** Report jobs live in a process-local, thread-safe
+  dict — simple and fast for a single instance, but not shared across workers or
+  persisted across restarts.
+- **Output quality tracks the local model.** Results with a 3B model are
+  demo-grade; larger models produce noticeably better reports.
+
+---
+
+## License
+
+Released under the [MIT License](LICENSE).
